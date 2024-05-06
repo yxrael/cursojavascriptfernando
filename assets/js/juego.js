@@ -64,3 +64,4 @@ const valorCarta = ( carta ) => {
  }
 
  console.log(valorCarta(pedirCarta()));
+//
