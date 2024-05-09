@@ -21,6 +21,7 @@ const divCartasJugador = document.querySelector('#jugador-cartas');
 const divCartasComputadora = document.querySelector('#computadora-cartas');
 const divTitulo = document.querySelector('.titulo');
 
+
 //crear una nueva baraja (ordenada)
 const crearDeck = () => {  
 
@@ -74,16 +75,18 @@ const turnoComputadora = () => {
     puntosComputadora = puntosComputadora + valorCarta( carta );
     puntosHTML[1].innerText = puntosComputadora;
 
-    const imgCarta = document.createElement('img');
-    imgCarta.src = `assets/cartas/${carta}.png`;
-    imgCarta.classList.add('carta');
-    imgCarta.title = valorCarta( carta );
-    divCartasComputadora.append( imgCarta );
+    // const imgCarta = document.createElement('img');
+    // imgCarta.src = `assets/cartas/${carta}.png`;
+    // imgCarta.classList.add('carta');
+    // divCartasComputadora.append( imgCarta );
+
+    dibujaCarta( carta, divCartasComputadora );
 
 }
 
 
 // Eventos
+// pedir nueva carta
 btnPedir.addEventListener('click', () => {
     
     const carta = pedirCarta();
@@ -91,11 +94,11 @@ btnPedir.addEventListener('click', () => {
     puntosJugador = puntosJugador + valorCarta( carta );
     puntosHTML[0].innerText = puntosJugador ;
 
-    const imgCarta = document.createElement('img');
-    imgCarta.src = `assets/cartas/${carta}.png`;
-    imgCarta.classList.add('carta');
-    imgCarta.title = valorCarta( carta );
-    divCartasJugador.append( imgCarta );
+    // const imgCarta = document.createElement('img');
+    // imgCarta.src = `assets/cartas/${carta}.png`;
+    // imgCarta.classList.add('carta');
+    // divCartasJugador.append( imgCarta );
+    dibujaCarta ( carta, divCartasJugador );
     
 
     if ( puntosJugador > 21 ) {
@@ -114,36 +117,61 @@ btnPedir.addEventListener('click', () => {
 
 // pasar a turno computadora
 btnDetener.addEventListener('click', () => {
-    compuActiva();
-})
 
-// turnoCompuActivo
-const compuActiva = () => {
     btnPedir.disabled = true;
     btnDetener.disabled = true;
-    // turnoComputadora();
-    // if ( puntosComputadora > 21 ) {
-    //     console.warn('Computadora pierde');
-    // } else if ( (puntosComputadora > puntosJugador) || ( puntosComputadora === 21 ) ) {
-    //     console.warn('Computadora gana');
-    // }
+
     while ( puntosComputadora < puntosJugador && puntosComputadora < 21 ) {
-        turnoComputadora();
-        if ( puntosComputadora > 21 ) {
-            console.warn('Computadora pierde');
-            divTitulo.textContent = 'Pierde la computadora';
-        };
+
+            turnoComputadora();
+            if ( puntosComputadora > 21 ) {
+                console.warn('Computadora pierde');
+                divTitulo.textContent = 'Pierde la computadora';
+            };
+        
     };
-    if ( puntosComputadora >= puntosJugador && puntosComputadora <=21 ){
+    if ( puntosComputadora > puntosJugador && puntosComputadora <=21 ){
         console.warn('Computadora gana');
         divTitulo.textContent = 'Gana la computadora';
-    }
-    
-}
+    } else if ( puntosComputadora === puntosJugador && puntosJugador <= 21 ) {
+        console.warn('Empate');
+        divTitulo.textContent = 'Empate';
+    } 
+})
 
 // recargar pagina
 btnNuevo.addEventListener('click', () => {
-    window.location.reload();
+    // window.location.reload();
+    deck = [];
+    crearDeck();
+
+    puntosComputadora = 0;
+    puntosJugador = 0;
+
+    puntosHTML[0].innerText = '0';
+    puntosHTML[1].innerText = '0'
+    divCartasComputadora.innerHTML = '';
+    divCartasJugador.innerHTML = '';
+
+    dibujaCarta( 'red_back', divCartasJugador);
+    dibujaCarta( 'grey_back', divCartasComputadora);
+
+    divTitulo.textContent = 'Blackjack';
+
+    btnPedir.disabled = false;
+    btnDetener.disabled = false;
+
 })
+
+const dibujaCarta = ( carta, identidadJugador ) => {
+
+        const imgCartaJ = document.createElement('img');
+        imgCartaJ.src = `assets/cartas/${ carta }.png`;
+        imgCartaJ.classList.add('carta');
+        imgCartaJ.title = valorCarta( carta );
+        identidadJugador.append( imgCartaJ );
+
+
+}
 
 
